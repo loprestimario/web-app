@@ -10,17 +10,21 @@ const MyPage = () => {
   const [bodyPart, setBodyPart] = useState([]);
   const [tests, setTests] = useState([]);
   const [searchActive, setSearchActive] = useState(false);
+  const [searchText, setSearchText] = useState('');
   const [noResultSearch, setNoResultSearch] = useState(false);
   const [loading, setLoading] = useState(false);
     const [esamiSelezionati, setEsamiSelezionati] = useState([]);
+    const [esameSelected, setEsameSelected] = useState("");
 
 
-  const load = () => {
+
+    const load = () => {
       // all ambulatori
       setAmbulatori([]);
       setSearchActive(false);
       setNoResultSearch(false);
-      axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/ambulatori', {})
+      setSearchText("")
+        axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/ambulatori', {})
           .then(res => {
               setAmbulatori(res.data);
               console.log("setAmbulatori  ", res.data)
@@ -28,7 +32,7 @@ const MyPage = () => {
           .catch(err => console.log("error", err));
 
       // load body part relativi al Primo ambulatorio
-      axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/body', {params: {id: 1}})
+        axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/body', {params: {id: 1}})
           .then(res => {
                   setBodyParts(res.data);
 
@@ -64,17 +68,16 @@ const MyPage = () => {
                         return esami
                     return name
                 })
-                console.log(esamiSelezionatiUpdated)
+                setEsamiSelezionati(esamiSelezionatiUpdated)
             })
             .catch(err => console.log("error", err));
     }
 
-    const insertEsame = () => {
+    const insertEsame = (id) => {
         // all ambulatori
-        axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/delete', {})
+        axios.post('https://mysql-app-1dc5cb1ca38d.herokuapp.com/insert/' + id, {params: {id: 1}})
             .then(res => {
-                setEsamiSelezionati(res.data);
-                console.log("esamiiiiiiiii   ", res.data)
+                loadEsamiSelezionati();
             })
             .catch(err => console.log("error", err));
     }
@@ -89,17 +92,14 @@ const MyPage = () => {
 
 
   useEffect(() => {
-    if(!searchActive){
 
+
+    if(!searchActive){
         setBodyParts([]);
         setTests([]);
-      console.log("load body part relativi all' ambulatorio selezionato")
     // load body part relativi all' ambulatorio selezionato
-    axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/body', {params: {id: ambulatorio}})
+    axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/body', {params: {id: ambulatorio, searchText: searchText}})
          .then(res => {setBodyParts(res.data)
-
-             console.log("sec 2 ambulatorio ", ambulatorio)
-             console.log("sec 2  ", res.data)
 
          axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/exams', {params: {id: ambulatorio, id_bd: res.data[0].id}})
               .then(res => { setTests(res.data)
@@ -114,16 +114,18 @@ const MyPage = () => {
           setTests([]);
 
           axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/exams', {params: {id: ambulatorio, id_bd: bodyPart}})
-          .then(res => {setTests(res.data)})
+          .then(res => {
+              setTests(res.data)
+          })
           .catch(err => console.log("error", err))
       }
   }, [ bodyPart]);
 
   const  searchFunc = (min_id, typeSearch) => {
       setNoResultSearch(false);
+      setSearchText(min_id);
       axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/search', {params: {id: min_id, typeSearch: typeSearch}})
           .then(res => {
-
 
               if(res.data[0]){
 
@@ -134,23 +136,29 @@ const MyPage = () => {
                       if (!ambulatoriSearch.find(elem => elem.id === data.id_amb)){
                           ambulatoriSearch.push(  {id: data.id_amb , name: data.name})
                       }
+                  });
+
+                  setAmbulatorio(ambulatoriSearch[0].id);
+                  res.data.forEach((data) => {
                       if (!bodyPartSearch.find(elem => elem.id === data.body)){
-                          bodyPartSearch.push({id: data.body , nome: data.nome})
-                      }
-                      if (!testSearch.find(elem => elem.id === data.id_esame)){
-                          testSearch.push({id: data.id_esame , descrizione: data.descrizione})
+                          if( ambulatoriSearch[0].id == data.id_amb)
+                              bodyPartSearch.push({id: data.body , nome: data.nome})
                       }
                   });
 
-                  console.log("res.datares.data ", res.data)
-                 // const bodyPartSearch = [{id: res.data[0].body , nome: res.data[0].nome}];
-                  console.log("res.datares.data bodyPartSearch", testSearch)
+                  res.data.forEach((data) => {
+                      if (!testSearch.find(elem => elem.id === data.id_esame)){
+                          if( bodyPartSearch[0].id == data.body)
+                              testSearch.push({id: data.id_esame , descrizione: data.descrizione})
+                      }
+                  });
 
+                 // const bodyPartSearch = [{id: res.data[0].body , nome: res.data[0].nome}];
                   //const testSearch = [{id: res.data[0].id_esame , descrizione: res.data[0].descrizione}];
                   setAmbulatori(ambulatoriSearch);
                   setBodyParts(bodyPartSearch);
                   setTests(testSearch);
-                  setSearchActive(true);
+                 // setSearchActive(true);
               }
               else {
                   setNoResultSearch(true);
@@ -244,19 +252,18 @@ const MyPage = () => {
               <div className="exams">
                   <div className="title ">Esami</div>
 
-                  <select className="form-select" size="3" aria-label="Size 3 select example">
+                  <select className="form-select" size="3" aria-label="Size 3 select"  id="selectExam">
                       {
-                          tests.map(test => (
+                          tests.map((test, index) => (
                               <option className="tests" key={test.descrizione}
-                                      value={test.id}>{test.descrizione}</option>
-
+                                      value={test.id_esame} selected={index == 0}  onChange={() => console.log("test.id_esame")}>{test.descrizione}</option>
                           ))
                       }
 
                   </select>
               </div>
               <div className="">
-                  <button type="button" onClick={() => console.log("esame")} className="btn btn-success">Seleziona
+                  <button type="button" onClick={() => insertEsame(document.getElementById('selectExam').selectedOptions[0].value)} className="btn btn-success">Seleziona
                       esame
                   </button>
               </div>
