@@ -20,7 +20,7 @@ const MyPage = () => {
       setAmbulatori([]);
       setSearchActive(false);
       setNoResultSearch(false);
-      axios.get('http://mysql-app-1dc5cb1ca38d.herokuapp.com/ambulatori', {})
+      axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/ambulatori', {})
           .then(res => {
               setAmbulatori(res.data);
               console.log("setAmbulatori  ", res.data)
@@ -28,12 +28,12 @@ const MyPage = () => {
           .catch(err => console.log("error", err));
 
       // load body part relativi al Primo ambulatorio
-      axios.get('http://mysql-app-1dc5cb1ca38d.herokuapp.com/body', {params: {id: 1}})
+      axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/body', {params: {id: 1}})
           .then(res => {
                   setBodyParts(res.data);
 
               console.log("res.datares.datares.data  ", res.data)
-                  axios.get('http://mysql-app-1dc5cb1ca38d.herokuapp.com/exams', {params: {id: 1, id_bd: res.data[0].id}})
+                  axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/exams', {params: {id: 1, id_bd: res.data[0].id}})
                       .then(res => {setTests(res.data)
                       })
                       .catch(err => console.log("error", err))
@@ -44,7 +44,7 @@ const MyPage = () => {
 
     const loadEsamiSelezionati = () => {
         // all ambulatori
-        axios.get('http://mysql-app-1dc5cb1ca38d.herokuapp.com/esami_selezionati', {})
+        axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/esami_selezionati', {})
             .then(res => {
                 setEsamiSelezionati(res.data);
                 console.log("esamiiiiiiiii   ", res.data)
@@ -56,7 +56,7 @@ const MyPage = () => {
         // all ambulatori
 
         console.log("idddddddddddd deleteee  ", id)
-        axios.delete('http://mysql-app-1dc5cb1ca38d.herokuapp.com/delete/' + id, {params: { id: id}})
+        axios.delete('https://mysql-app-1dc5cb1ca38d.herokuapp.com/delete/' + id, {params: { id: id}})
             .then(res => {
                 console.log("esamiiiiiiiii   ", res)
                 const esamiSelezionatiUpdated =  esamiSelezionati.filter((esami) => {
@@ -71,7 +71,7 @@ const MyPage = () => {
 
     const insertEsame = () => {
         // all ambulatori
-        axios.get('http://mysql-app-1dc5cb1ca38d.herokuapp.com/delete', {})
+        axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/delete', {})
             .then(res => {
                 setEsamiSelezionati(res.data);
                 console.log("esamiiiiiiiii   ", res.data)
@@ -95,13 +95,13 @@ const MyPage = () => {
         setTests([]);
       console.log("load body part relativi all' ambulatorio selezionato")
     // load body part relativi all' ambulatorio selezionato
-    axios.get('http://mysql-app-1dc5cb1ca38d.herokuapp.com/body', {params: {id: ambulatorio}})
+    axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/body', {params: {id: ambulatorio}})
          .then(res => {setBodyParts(res.data)
 
              console.log("sec 2 ambulatorio ", ambulatorio)
              console.log("sec 2  ", res.data)
 
-         axios.get('http://mysql-app-1dc5cb1ca38d.herokuapp.com/exams', {params: {id: ambulatorio, id_bd: res.data[0].id}})
+         axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/exams', {params: {id: ambulatorio, id_bd: res.data[0].id}})
               .then(res => { setTests(res.data)
               })
               .catch(err => console.log("error", err))
@@ -113,7 +113,7 @@ const MyPage = () => {
       if(!searchActive){
           setTests([]);
 
-          axios.get('http://mysql-app-1dc5cb1ca38d.herokuapp.com/exams', {params: {id: ambulatorio, id_bd: bodyPart}})
+          axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/exams', {params: {id: ambulatorio, id_bd: bodyPart}})
           .then(res => {setTests(res.data)})
           .catch(err => console.log("error", err))
       }
@@ -121,7 +121,7 @@ const MyPage = () => {
 
   const  searchFunc = (min_id, typeSearch) => {
       setNoResultSearch(false);
-      axios.get('http://mysql-app-1dc5cb1ca38d.herokuapp.com/search', {params: {id: min_id, typeSearch: typeSearch}})
+      axios.get('https://mysql-app-1dc5cb1ca38d.herokuapp.com/search', {params: {id: min_id, typeSearch: typeSearch}})
           .then(res => {
 
 
