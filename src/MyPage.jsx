@@ -60,7 +60,7 @@ const MyPage = () => {
         // all ambulatori
 
         console.log("idddddddddddd deleteee  ", id)
-        axios.delete('https://mysql-app-1dc5cb1ca38d.herokuapp.com/delete' + id, {params: { id: id}})
+        axios.delete('https://mysql-app-1dc5cb1ca38d.herokuapp.com/delete/' + id, {params: { id: id}})
             .then(res => {
                 console.log("esamiiiiiiiii   ", res)
                 const esamiSelezionatiUpdated =  esamiSelezionati.filter((esami) => {
