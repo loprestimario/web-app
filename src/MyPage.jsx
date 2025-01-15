@@ -195,7 +195,7 @@ const MyPage = () => {
               </div>
             </div>
             <div className="col-md">
-              <div className="form-floating">
+              <div className="form-floating" onChange={() => enableButton()}>
                 <select className="form-select" id="floatingSelectGrid">
                   <option key="1" value="Codice Ministeriale">Codice Ministeriale</option>
                   <option key="2" value="Codice interno">Codice Interno</option>
@@ -209,7 +209,7 @@ const MyPage = () => {
             <div className="search-container">
               {loading ?
                 <div className="spinner-border" role="status"/> :
-                <button type="submit" className="btn btn-primary" id="searchButton">Avvia ricerca</button>
+                <button type="submit" className="btn btn-primary" disabled={true} id="searchButton">Avvia ricerca</button>
               }
             </div>
             <div className="reset-container">
