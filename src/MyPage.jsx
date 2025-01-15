@@ -34,7 +34,12 @@ const MyPage = () => {
     axios.get(`${PATH_BASE}/body`, {params: {id: 1}})
       .then(res => {
         setBodyParts(res.data);
-        axios.get(`${PATH_BASE}/exams`, {params: {id: 1, id_bd: res.data[0].id}})
+        axios.get(`${PATH_BASE}/exams`, {params:
+            { id: 1,
+              id_bd: res.data[0].id,
+              searchText: searchText,
+              searchType: searchType
+            }})
           .then(res => {
             setTests(res.data)
           })
@@ -96,7 +101,9 @@ const MyPage = () => {
           axios.get(`${PATH_BASE}/exams`, {
             params: {
               id: ambulatorio,
-              id_bd: res.data[0].id
+              id_bd: res.data[0].id,
+              searchText: searchText,
+              searchType: searchType
             }
           })
             .then(res => {
@@ -112,7 +119,9 @@ const MyPage = () => {
       axios.get(`${PATH_BASE}/exams`, {
         params: {
           id: ambulatorio,
-          id_bd: bodyPart
+          id_bd: bodyPart,
+          searchText: searchText,
+          searchType: searchType
         }
       })
         .then(res => {
@@ -216,7 +225,7 @@ const MyPage = () => {
               }
             </div>
             <div className="reset-container">
-              <button type="reset" onClick={() => load()} className="btn btn-danger">Reset</button>
+              <button type="reset" onClick={() => load()} className="btn btn-danger">Vedi tutti</button>
             </div>
           </div>
           <div className="no-result">{noResultSearch && <p> Nessun risultato trovato</p>}</div>
