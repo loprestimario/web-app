@@ -54,6 +54,10 @@
   min-width: 200px;
 }
 
+.sort-button {
+  margin-left: 5px;
+}
+
 @media (max-width: 600px) {
   .container-panel {
     display: flex;

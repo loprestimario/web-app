@@ -14,6 +14,7 @@ const MyPage = () => {
   const [searchType, setSearchType] = useState('');
   const [noResultSearch, setNoResultSearch] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [sortOrder, setSortOrder] = useState(false);
   const [esamiSelezionati, setEsamiSelezionati] = useState([]);
 
 
@@ -190,6 +191,17 @@ const MyPage = () => {
     }
   }
 
+  const sortByName = (elem) => {
+    let esamiSorted = [];
+    if (sortOrder)
+      esamiSorted = esamiSelezionati.sort((a, b) => a[elem].toLowerCase() > b[elem].toLowerCase() ? 1 : -1);
+    else
+      esamiSorted = esamiSelezionati.sort((a, b) => b[elem].toLowerCase() > a[elem].toLowerCase() ? 1 : -1);
+
+    setSortOrder(!sortOrder);
+    setEsamiSelezionati([...esamiSorted])
+  }
+
   return (
     <>
       <div className="search-container-form">
@@ -285,8 +297,13 @@ const MyPage = () => {
         <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Esame</th>
-          <th scope="col">Laboratorio</th>
+          <th scope="col">Esame
+            <button type="button" className="sort-button  btn btn-primary btn-sm" onClick={() => sortByName("descrizione")}>ordina</button>
+          </th>
+          <th scope="col">Laboratorio
+            <button type="button" className="sort-button  btn btn-primary btn-sm"
+                    onClick={() => sortByName("name")}>ordina</button>
+          </th>
           <th scope="col">Codice ministeriale</th>
           <th scope="col">Codice interno</th>
           <th scope="col">Data</th>
