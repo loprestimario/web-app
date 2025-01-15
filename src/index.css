@@ -1,27 +1,96 @@
-.ambulatori {
-
+.container-panel {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
-.container{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+.buttons-container {
+  max-width: 260px !important;
+  padding-bottom: 50px;
 }
-
-
 
 .title {
-    color: red;
-    text-transform: uppercase;
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 20px;
+  color: red;
+  text-transform: uppercase;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 30px 0 10px 0;
+}
+
+.no-result {
+  color: red;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 20px 0;
 }
 
 :global(.form-select) {
-    padding: 0 !important;
+  padding: 0 !important;
+}
+
+.search-container-form {
+  margin: auto;
+  max-width: 800px;
 }
 
 .search-container {
-    margin-bottom: 50px;
+  margin-top: 15px;
+  margin-right: 20px;
+}
+
+.reset-container {
+  margin-top: 15px;
+}
+
+.select-button button {
+  margin-top: 70px;
+}
+
+.table {
+  margin-top: 60px;
+}
+
+.exams {
+  min-width: 200px;
+}
+
+@media (max-width: 600px) {
+  .container-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100vw;
+  }
+
+  .search-container-form {
+    width: 100vw;
+    margin: auto;
+    padding-bottom: 20px;
+  }
+
+  .buttons-container {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0px;
+  }
+
+  .search-container {
+    margin-right: 0px;
+  }
+
+  .no-result {
+    padding: 0;
+  }
+
+  .exams {
+    margin-bottom: 20px;
+  }
+
+  .table {
+    margin-top: 30px;
+  }
+
+  .select-button button {
+    margin-top: 10px;
+  }
 }
