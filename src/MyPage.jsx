@@ -6,7 +6,7 @@ const PATH_BASE = "https://mysql-app-1dc5cb1ca38d.herokuapp.com"
 
 const MyPage = () => {
   const [ambulatori, setAmbulatori] = useState([]);
-  const [ambulatorio, setAmbulatorio] = useState([1]);
+  const [ambulatorio, setAmbulatorio] = useState(1);
   const [bodyParts, setBodyParts] = useState([]);
   const [bodyPart, setBodyPart] = useState([]);
   const [tests, setTests] = useState([]);
@@ -53,18 +53,17 @@ const MyPage = () => {
     axios.delete(`${PATH_BASE}/delete/` + id, {params: {id: id}})
       .then(res => {
         const esamiSelezionatiUpdated = esamiSelezionati.filter((esami) => {
-          if (esami.id_esame != id)
+          if (esami.id != id)
             return esami
-          return name
-        })
-        setEsamiSelezionati(esamiSelezionatiUpdated)
+        });
+        setEsamiSelezionati(esamiSelezionatiUpdated);
       })
       .catch(err => console.log("error", err));
   }
 
   const insertEsame = (id) => {
     // all ambulatori
-    axios.post(`${PATH_BASE}/insert/` + id, {params: {id: 1}})
+    axios.post(`${PATH_BASE}/insert/` + id, {params: {id: id, ambulatorio: ambulatorio}})
       .then(res => {
         loadEsamiSelezionati();
       })
@@ -274,7 +273,8 @@ const MyPage = () => {
           <th scope="col">Laboratorio</th>
           <th scope="col">Codice ministeriale</th>
           <th scope="col">Codice interno</th>
-          <th scope="col">Elimina</th>
+          <th scope="col">Data</th>
+          <th scope="col">Azione</th>
         </tr>
         </thead>
         <tbody className="table-group-divider">
@@ -286,10 +286,11 @@ const MyPage = () => {
               <td>{test.name}</td>
               <td>{test['codice Ministeriale']}</td>
               <td>{test['codice interno']}</td>
+              <td>{ new Date(test.data).toLocaleString().slice(0, 21)}</td>
               <td>
-                <button type="button"
+              <button type="button"
                         className="btn btn-sm btn-outline-danger"
-                        id={test.id_esame}
+                        id={test.id}
                         onClick={(e) => deleteEsame(e.target.id)}>
                     Rimuovi
                 </button>
