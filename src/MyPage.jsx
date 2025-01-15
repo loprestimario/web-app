@@ -52,7 +52,7 @@ const MyPage = () => {
   }
 
   const deleteEsame = (id) => {
-    axios.delete(`${PATH_BASE}/delete`, {params: {id: id}})
+    axios.delete(`${PATH_BASE}/delete/` + id, {params: {id: id}})
       .then(res => {
         const esamiSelezionatiUpdated = esamiSelezionati.filter((esami) => {
           if (esami.id != id)
