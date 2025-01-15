@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css"
 import axios from 'axios';
 
-const PATH_BASE = "https://mysql-app-1dc5cb1ca38d.herokuapp.com"
+//const PATH_BASE = "https://mysql-app-1dc5cb1ca38d.herokuapp.com"
+const PATH_BASE = "http://localhost:3040"
 
 const MyPage = () => {
   const [ambulatori, setAmbulatori] = useState([]);
@@ -20,6 +21,9 @@ const MyPage = () => {
   const load = () => {
     // all ambulatori
     setAmbulatori([]);
+    setAmbulatorio(1);
+    setBodyParts([]);
+    setBodyPart([]);
     setNoResultSearch(false);
     setSearchText("");
     setSearchType("");
