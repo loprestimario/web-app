@@ -11,6 +11,7 @@ const MyPage = () => {
   const [bodyPart, setBodyPart] = useState([]);
   const [tests, setTests] = useState([]);
   const [searchText, setSearchText] = useState('');
+  const [searchType, setSearchType] = useState('');
   const [noResultSearch, setNoResultSearch] = useState(false);
   const [loading, setLoading] = useState(false);
   const [esamiSelezionati, setEsamiSelezionati] = useState([]);
@@ -20,7 +21,8 @@ const MyPage = () => {
     // all ambulatori
     setAmbulatori([]);
     setNoResultSearch(false);
-    setSearchText("")
+    setSearchText("");
+    setSearchType("");
 
     axios.get(`${PATH_BASE}/ambulatori`, {})
       .then(res => {
@@ -50,7 +52,7 @@ const MyPage = () => {
   }
 
   const deleteEsame = (id) => {
-    axios.delete(`${PATH_BASE}/delete/` + id, {params: {id: id}})
+    axios.delete(`${PATH_BASE}/delete`, {params: {id: id}})
       .then(res => {
         const esamiSelezionatiUpdated = esamiSelezionati.filter((esami) => {
           if (esami.id != id)
@@ -63,7 +65,7 @@ const MyPage = () => {
 
   const insertEsame = (id) => {
     // all ambulatori
-    axios.post(`${PATH_BASE}/insert/` + id, {params: {id: id, ambulatorio: ambulatorio}})
+    axios.post(`${PATH_BASE}/insert`, {params: {id: id, ambulatorio: ambulatorio}})
       .then(res => {
         loadEsamiSelezionati();
       })
@@ -85,7 +87,8 @@ const MyPage = () => {
       axios.get(`${PATH_BASE}/body`, {
         params: {
           id: ambulatorio,
-          searchText: searchText
+          searchText: searchText,
+          searchType: searchType
         }
       })
         .then(res => {
@@ -119,10 +122,11 @@ const MyPage = () => {
 
   }, [bodyPart]);
 
-  const searchFunc = (min_id, typeSearch) => {
+  const searchFunc = (text, typeSearch) => {
     setNoResultSearch(false);
-    setSearchText(min_id);
-    axios.get(`${PATH_BASE}/search`, {params: {id: min_id, typeSearch: typeSearch}})
+    setSearchText(text);
+    setSearchType(typeSearch);
+    axios.get(`${PATH_BASE}/search`, {params: {text: text, typeSearch: typeSearch}})
       .then(res => {
 
         if (res.data[0]) {
